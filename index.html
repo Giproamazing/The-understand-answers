@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Page</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: background-color 0.5s ease;
+        }
+
+        .uncopyable {
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            opacity: 0;
+        }
+
+        #mainText {
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        #countdown {
+            font-size: 1.5em;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #inputCode {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #codeInput {
+            text-align: center;
+            color: green;
+        }
+
+        #result, #feedback {
+            font-size: 1.5em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        #feedback {
+            font-size: 1em;
+        }
+
+        #feedback.wrong {
+            color: red;
+        }
+
+        #feedback.correct {
+            color: green;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes moveUp {
+            to { transform: translateY(-50px); opacity: 0; }
+        }
+
+        .fakeText {
+            color: black;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="hiddenText" class="uncopyable">
+        <!-- Fake text to confuse those who inspect the element -->
+        <div class="fakeText">
+            LOREMipsumDOLORsitAMETconsecteturADIPISCINGelitNULLAmalesuadaFAMESACturpisEGESTASUTtempusQUAMfelisCOMMODOimperdietQUISaliquamEXVELitGRAINliberoUTDUIACduisVENENATISvehiculaTORTORRISUSvenenatisTRISTIQUEaliquetDIAMnecINTERDUMFUSCEsed.
+            NULLAmalesuadaFAMESACturpisEGESTASUTtempusQUAMfelisCOMMODOimperdietQUISaliquamEXVELitGRAINliberoUTDUIACduisVENENATISvehiculaTORTORRISUSvenenatisTRISTIQUEaliquetDIAMnecINTERDUMFUSCEsed.
+        </div>
+    </div>
+
+    <div id="mainText">THE END</div>
+    <div id="countdown"></div>
+    <div id="inputCode">
+        <input type="text" id="codeInput" placeholder="Enter code...">
+        <button onclick="checkCode()">Submit</button>
+        <div id="feedback"></div>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        const mainText = document.getElementById('mainText');
+        const countdown = document.getElementById('countdown');
+        const inputCode = document.getElementById('inputCode');
+        const result = document.getElementById('result');
+        const feedback = document.getElementById('feedback');
+        const codeInput = document.getElementById('codeInput');
+
+        let countdownDate = new Date("September 7, 2024 00:00:00").getTime();
+
+        setTimeout(() => {
+            mainText.style.animation = "moveUp 2s forwards";
+            setTimeout(() => {
+                countdown.style.display = 'block';
+                startCountdown();
+                inputCode.style.display = 'block';
+            }, 2000);
+        }, 2000);
+
+        function startCountdown() {
+            let x = setInterval(() => {
+                let now = new Date().getTime();
+                let distance = countdownDate - now;
+
+                let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdown.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    countdown.innerHTML = "EXPIRED";
+                }
+            }, 1000);
+        }
+
+        function checkCode() {
+            const realCode = "torne sundays soup";
+            const fakeCodes = [
+                "code1", "secretPass123", "open sesame", "letmein2024", "password321",
+                "hiddenKey", "unlockMe", "cipherCode", "treasureHunt", "doorwayAccess",
+                "stealthMode", "invisibleKey", "abc123", "nothingHere", "allYourBase",
+                "justGuess", "adminAccess", "redHerring", "totallyLegit"
+            ];
+
+            const fakeAnswers = [
+                "WRONG CODE", "ACCESS DENIED", "TRY AGAIN", "INCORRECT", "INVALID CODE",
+                "NOT THIS TIME", "FAKE KEY", "WRONG ENTRY", "NO ACCESS", "ERROR",
+                "INCORRECT PASS", "INVALID ENTRY", "LOLOLOLO", "NOPE", "TOO EASY",
+                "GOTCHA", "NICE TRY", "HARD LUCK", "LOL WONDERING"
+            ];
+
+            const inputValue = codeInput.value.toLowerCase();
+
+            if (inputValue === realCode) {
+                mainText.style.display = 'none';
+                countdown.style.display = 'none';
+                inputCode.style.display = 'none';
+                result.innerHTML = "THE ANSWER IS IN THE STAGE MIDDLE";
+                result.style.display = 'block';
+                feedback.classList.remove('wrong');
+                feedback.classList.add('correct');
+                feedback.innerHTML = "Award of nerd goes to You<br>Aura 10000+";
+                feedback.style.display = 'block';
+
+                // Adding more fake text to obscure the answer
+                const hiddenText = document.getElementById('hiddenText');
+                hiddenText.innerHTML = `
+                NICE TRY BUT DONT CHEAT
+                NICE TRY BUT DONT CHEAT
+                NICE TRY BUT DONT CHEAT
+                NICE TRY BUT DONT CHEAT
+                LOREMipsumDOLORsitAMETconsecteturADIPISCINGelitNULLAmalesuadaFAMESACturpisEGESTASUTtempusQUAMfelisCOMMODOimperdietQUISaliquamEXVELitGRAINliberoUTDUIACduisVENENATISvehiculaTORTORRISUSvenenatisTRISTIQUEaliquetDIAMnecINTERDUMFUSCEsed.
+                `.repeat(5);
+                hiddenText.classList.add('uncopyable');
+                hiddenText.style.opacity = '0';
+            } else if (fakeCodes.includes(inputValue)) {
+                result.innerHTML = fakeAnswers[fakeCodes.indexOf(inputValue)];
+                result.style.display = 'block';
+                feedback.classList.remove('correct');
+                feedback.classList.add('wrong');
+                feedback.innerHTML = "lol nice one";
+                feedback.style.display = 'block';
+                flashRed();
+            } else {
+                result.innerHTML = "INVALID ENTRY";
+                result.style.display = 'block';
+                feedback.classList.remove('correct');
+                feedback.classList.add('wrong');
+                feedback.innerHTML = "lol nice one";
+                feedback.style.display = 'block';
+                flashRed();
+            }
+        }
+
+        function flashRed() {
+            document.body.style.backgroundColor = "red";
+            setTimeout(() => {
+                document.body.style.backgroundColor = "black";
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
